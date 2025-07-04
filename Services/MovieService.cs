@@ -40,16 +40,21 @@ public class MovieService : IMovieService
 
         var movieDto = new MovieDto
         {
-            Title = movieDetails.GetProperty("title").GetString(),
-            OriginalTitle = movieDetails.GetProperty("original_title").GetString(),
+            Title = movieDetails.GetProperty("title").GetString()??"Sin titulo",
+            OriginalTitle = movieDetails.GetProperty("original_title").GetString()?? "",
             VoteAverage = movieDetails.GetProperty("vote_average").GetDouble(),
-            ReleaseDate = movieDetails.GetProperty("release_date").GetString(),
-            Overview = movieDetails.GetProperty("overview").GetString(),
+            ReleaseDate = movieDetails.GetProperty("release_date").GetString() ?? "Sin fecha",
+            Overview = movieDetails.GetProperty("overview").GetString() ?? "Sin review",
             SimilarMovies = similar.GetProperty("results")
                 .EnumerateArray()
                 .Take(5)
-                .Select(x => $"{x.GetProperty("title").GetString()} ({x.GetProperty("release_date").GetString()[..4]})")
-                .ToList()
+                .Select(x =>
+                {
+                    var title = x.GetProperty("title").GetString() ?? "Desconocida";
+                    var date = x.GetProperty("release_date").GetString();
+                    var year = (date?.Length >= 4) ? date[..4] : "????";
+                    return $"{title} ({year})";
+                }).ToList()
         };
 
         var options = new DistributedCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
