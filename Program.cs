@@ -1,3 +1,4 @@
+using MovieApi.Interfaces;
 using MovieApi.Services;
 using StackExchange.Redis;
 
@@ -18,6 +19,8 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<IMovieProvider, TmdbMovieProvider>();
 
 var app = builder.Build();
 

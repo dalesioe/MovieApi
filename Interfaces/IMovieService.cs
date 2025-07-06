@@ -1,6 +1,6 @@
 using MovieApi.Models;
 
-namespace MovieApi.Services;
+namespace MovieApi.Interfaces;
 public interface IMovieService
 {
     Task<MovieDto?> GetMovieInfoAsync(string title);
